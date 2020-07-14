@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+
+
+<ui:composition template="../_template.xhtml">
+	<ui:define name="titulo">
+				Livros
+			</ui:define>
+	<ui:define name="conteudo">
+		<h:form>
+			<h:dataTable value="#{livroBean.all}" var="livro" id="tableLivros" rows=""
+				styleClass="table">				
+				<h:column>
+					<h:outputText value="#{livro.titulo}" />
+				</h:column>
+				
+				<h:column>
+					<h:commandLink styleClass="btn btn-danger" value="Remover" action="#{livroBean.remover(livro)}" ></h:commandLink>
+					<h:commandLink styleClass="btn btn-warning ml-2" value="Editar" action="#{livroBean.editar(livro)}"  ></h:commandLink>
+				</h:column>
+				
+				
+				
+			</h:dataTable>
+		</h:form>
+	</ui:define>
+
+</ui:composition>
+
+</html>

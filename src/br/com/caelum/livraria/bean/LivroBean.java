@@ -2,6 +2,7 @@ package br.com.caelum.livraria.bean;
 
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -21,15 +22,51 @@ public class LivroBean {
 
 	private Integer autorId;
 
-	public void gravar() {
-		System.out.println("Gravando livro " + this.livro.getTitulo());
+	public String gravar() {
 		temAutor();
-		new DAO<Livro>(Livro.class).adiciona(this.livro);
+		persist(this.livro);
+		
+		return "/livros/lista?faces-redirect=true";
+
+	}
+
+	@PostConstruct
+	public void Load() {
+		if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("livroEdicao") == null)
+			return;
+
+		this.livro = (Livro) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("livroEdicao");
+		FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+	}
+
+	private void persist(Livro livro) {
+
+		if (livro.getId() == null)
+			new DAO<Livro>(Livro.class).adiciona(this.livro);
+		else
+			new DAO<Livro>(Livro.class).atualiza(this.livro);
+
+	}
+
+	public void remover(Livro livro) {
+
+		new DAO<Livro>(Livro.class).remove(livro);
+	}
+
+	public String editar(Livro livro) {
+		this.livro = livro;
+
+		FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("livroEdicao", livro);
+		return "/livros/add?faces-redirect=true";
 	}
 
 	private void temAutor() {
 		if (livro.getAutores().isEmpty())
 			FacesContext.getCurrentInstance().addMessage("autor", new FacesMessage("Informe o autor"));
+	}
+
+	public List<Livro> getAll() {
+		return new DAO<Livro>(Livro.class).listaTodos();
 	}
 
 	public void vincularAutor() {
@@ -48,7 +85,7 @@ public class LivroBean {
 	}
 
 	public String formAutor() {
-		return "autor?faces-redirect=true";
+		return "autores/add?faces-redirect=true";
 	}
 
 	public List<Autor> getAutoresDoLivro() {
