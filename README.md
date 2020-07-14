@@ -9,4 +9,9 @@
 5. faces ajax
 6. faces validators
 7. JSF request lifecycle
+8. passThroughAttribute
+9. metadataParams
+10. FacesContext, getExternalContext
+11. JSF validators
+
 
