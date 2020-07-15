@@ -5,6 +5,8 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaQuery;
 
+import br.com.caelum.livraria.modelo.Usuario;
+
 public class DAO<T> {
 
 	private final Class<T> classe;
@@ -69,10 +71,25 @@ public class DAO<T> {
 		return instancia;
 	}
 
+	public boolean existe(Usuario usuario) {
+		EntityManager em = new JPAUtil().getEntityManager();
+		Usuario singleResult = em.createQuery("select u from Usuario u where u.email = :pEmail and u.senha = :pSenha", Usuario.class)
+				                 .setParameter("pEmail", usuario.getEmail())
+				                 .setParameter("pSenha", usuario.getSenha())
+				                 .getResultList()
+				                 .stream()
+				                 .findFirst()
+				                 .orElse(null);
+
+		em.close();
+
+		return singleResult != null;
+
+	}
+
 	public int contaTodos() {
 		EntityManager em = new JPAUtil().getEntityManager();
-		long result = (Long) em.createQuery("select count(n) from livro n")
-				.getSingleResult();
+		long result = (Long) em.createQuery("select count(n) from livro n").getSingleResult();
 		em.close();
 
 		return (int) result;
@@ -83,8 +100,7 @@ public class DAO<T> {
 		CriteriaQuery<T> query = em.getCriteriaBuilder().createQuery(classe);
 		query.select(query.from(classe));
 
-		List<T> lista = em.createQuery(query).setFirstResult(firstResult)
-				.setMaxResults(maxResults).getResultList();
+		List<T> lista = em.createQuery(query).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
 
 		em.close();
 		return lista;

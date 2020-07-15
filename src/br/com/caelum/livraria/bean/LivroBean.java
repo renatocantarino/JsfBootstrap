@@ -12,6 +12,7 @@ import javax.faces.context.FacesContext;
 import br.com.caelum.livraria.dao.DAO;
 import br.com.caelum.livraria.modelo.Autor;
 import br.com.caelum.livraria.modelo.Livro;
+import br.com.caelum.livraria.util.SessionManager;
 import sun.security.validator.ValidatorException;
 
 @ManagedBean
@@ -35,8 +36,9 @@ public class LivroBean {
 		if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("livroEdicao") == null)
 			return;
 
-		this.livro = (Livro) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("livroEdicao");
-		FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+		this.livro = (Livro)  SessionManager.getSession("livroEdicao");	
+		SessionManager.clearSession("livroEdicao");	
+		
 	}
 
 	private void persist(Livro livro) {
@@ -54,9 +56,8 @@ public class LivroBean {
 	}
 
 	public String editar(Livro livro) {
-		this.livro = livro;
-
-		FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("livroEdicao", livro);
+		
+		SessionManager.setSession("livroEdicao", livro);
 		return "/livros/add?faces-redirect=true";
 	}
 

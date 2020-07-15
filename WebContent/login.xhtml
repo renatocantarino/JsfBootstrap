@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<ui:composition template="_template.xhtml">
+
+	<ui:define name="titulo">
+
+	</ui:define>
+
+	<ui:define name="conteudo">
+		<h:form id="login">
+	
+	
+
+			<!-- form card login -->
+			<div class="card center rounded shadow shadow-sm col-8 " >
+				<div class="card-body">
+					<h:messages id="msgs" styleClass="alert alert-danger bold" />
+					<div class="form-group">
+						<h:outputLabel value="E-mail:" for="email" />
+
+						<h:inputText id="email" value="#{loginBean.usuario.email}"
+							required="true"
+							styleClass="form-control form-control-lg rounded-0">
+							<f:passThroughAttribute name="type" value="email" />
+						</h:inputText>							
+					</div>
+
+					<div class="form-group">
+
+						<h:outputLabel value="Senha:" for="senha" />
+
+						<h:inputText id="senha" value="#{loginBean.usuario.senha}"
+							required="true"
+							styleClass="form-control form-control-lg rounded-0">
+							<f:passThroughAttribute name="type" value="password" />
+						</h:inputText>
+						
+
+					</div>
+						<h:commandButton value="Entrar" action="#{loginBean.efetuaLogin}" styleClass="btn btn-primary" />
+				</div>
+				
+				
+			</div>
+
+
+
+
+				
+
+			
+			
+
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>
